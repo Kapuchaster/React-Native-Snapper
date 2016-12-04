@@ -13,20 +13,20 @@ import {
   View,
   Image,
   TextInput,
-  Button
+  Button,
+  Dimensions
 } from 'react-native';
 
+const screenWidth = Dimensions.get('window').width;
 
 export default class SnapVoter extends Component {
   render() {
-    let pic = {
-      uri: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'
-    };
+    let logo = require('./img/Logo.jpg');
     return (
       <View>
         <Image
-          style={{width: 400, height: 110}}
-          source={require('./img/Logo.jpg')}
+          style={{width: screenWidth, height: 110}}
+          source={logo}
         />
         <WelcomeScreen/>
         <TextInput placeholder="Em@il"/>
