@@ -17,8 +17,8 @@ export default class SnapVoter extends Component {
   constructor(props) {
     super(props);
     this.state = {
-  screen: 'welcomeScreen'
-}
+      screen: 'welcomeScreen'
+    }
   }
 
   hand = (data) => {
@@ -36,11 +36,7 @@ export default class SnapVoter extends Component {
     }
     else if(this.state.screen === 'accTrue'){
       return (
-        <View>
-          <LoggedUser />
-          <Text> {"MainActivity"} </Text>
-
-        </View>
+        <LoggedUser />
       )
     }
   }

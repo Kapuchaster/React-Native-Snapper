@@ -17,8 +17,6 @@ import {
 
 const screenWidth = Dimensions.get('window').width;
 
-
-
 export default class WelcomeScreen extends Component {
   constructor(props) {
     super(props);
