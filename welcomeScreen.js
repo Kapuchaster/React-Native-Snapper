@@ -17,10 +17,30 @@ import {
 
 const screenWidth = Dimensions.get('window').width;
 
+
+
 export default class WelcomeScreen extends Component {
   constructor(props) {
     super(props);
+    this.state = {};
+    this.checkAcc = this.checkAcc.bind(this);
+    this.registerAcc = this.registerAcc.bind(this);
+  }
 
+  checkAcc() {
+    // TODO: Check in the Server/server.js /GET
+    if(this.state.loginInputText === 'Admin'
+      && this.state.passwordInputText === 'Password'){
+        this.props.hand("You are Logged in !");
+      }
+    else{
+      this.props.hand("Wrong Login or Password! /l Admin /p Password")
+    }
+  }
+
+  registerAcc() {
+    //TODO: Register in the Server/server.js /POST
+    this.props.hand("Register function will be availabe later");
   }
 
   render() {
@@ -32,9 +52,9 @@ export default class WelcomeScreen extends Component {
           style={{width: screenWidth, height: 110}}
           source={logo}
         />
-        <TextInput placeholder="Em@il"/>
-        <TextInput placeholder="Password"/>
-        <Button title="Sign In" onPress={() => {this.props.hand('Success!')} }/>
+        <TextInput placeholder="Em@il" onChangeText={(loginInputText) => this.setState({loginInputText})} value={this.state.loginInputText}/>
+        <TextInput placeholder="Password" onChangeText={(passwordInputText) => this.setState({passwordInputText})} value={this.state.passwordInputText}/>
+        <Button title="Sign In" onPress={this.checkAcc}/>
 
         <TextInput placeholder="Em@il"/>
         <TextInput placeholder="Full Name"/>
