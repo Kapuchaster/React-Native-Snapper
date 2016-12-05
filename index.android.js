@@ -6,6 +6,7 @@
 
 import React, { Component } from 'react';
 import WelcomeScreen from './welcomeScreen.js';
+import LoggedUser from './loggedUser.js';
 import {
   AppRegistry,
   View,
@@ -25,12 +26,23 @@ export default class SnapVoter extends Component {
     }
 
   render() {
-    return (
-      <View>
-        <WelcomeScreen hand={this.hand} />
-        <Text> {this.state.screen} </Text>
-      </View>
-    );
+    if(this.state.screen === 'welcomeScreen'){
+      return (
+        <View>
+          <WelcomeScreen hand={this.hand} />
+          <Text> {this.state.screen} </Text>
+        </View>
+      );
+    }
+    else if(this.state.screen === 'accTrue'){
+      return (
+        <View>
+          <LoggedUser />
+          <Text> {"MainActivity"} </Text>
+
+        </View>
+      )
+    }
   }
 }
 

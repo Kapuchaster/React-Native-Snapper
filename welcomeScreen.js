@@ -23,6 +23,7 @@ export default class WelcomeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.state.msg = "f";
     this.checkAcc = this.checkAcc.bind(this);
     this.registerAcc = this.registerAcc.bind(this);
   }
@@ -31,16 +32,16 @@ export default class WelcomeScreen extends Component {
     // TODO: Check in the Server/server.js /GET
     if(this.state.loginInputText === 'Admin'
       && this.state.passwordInputText === 'Password'){
-        this.props.hand("You are Logged in !");
+        this.props.hand("accTrue");
       }
     else{
-      this.props.hand("Wrong Login or Password! /l Admin /p Password")
+      this.setState({msg : "Wrong Login or Password! /l Admin /p Password"});
     }
   }
 
   registerAcc() {
     //TODO: Register in the Server/server.js /POST
-    this.props.hand("Register function will be availabe later");
+    this.setState({msg : "will be availabe later"});
   }
 
   render() {
@@ -60,7 +61,8 @@ export default class WelcomeScreen extends Component {
         <TextInput placeholder="Full Name"/>
         <TextInput placeholder="Username"/>
         <TextInput placeholder="Password"/>
-        <Button title="Register" onPress={postAcc}/>
+        <Button title="Register" onPress={this.registerAcc}/>
+        <Text> {this.state.msg} </Text>
       </View>
     );
   }
