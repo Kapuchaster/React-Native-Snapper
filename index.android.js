@@ -39,6 +39,11 @@ export default class SnapVoter extends Component {
         <LoggedUser />
       )
     }
+    else{
+      return (
+        <Text> Screen Id Error </Text>
+      )
+    }
   }
 }
 

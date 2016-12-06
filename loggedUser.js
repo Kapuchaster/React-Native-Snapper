@@ -5,7 +5,10 @@
  */
 
 import React, { Component } from 'react';
-import EvaluationPhotos from './evaluationPhotos.js';
+import GlobalVoting from './globalVoting.js';
+import Profile from './profile.js';
+import FriendsVote from './friendsVote.js';
+import PrepareVote from './prepareVote.js'
 import Swiper from 'react-native-swiper';
 import {
   View,
@@ -48,15 +51,18 @@ export default class LoggedUser extends Component {
 
   render() {
     return (
-      <Swiper style={styles.wrapper} showsButtons={true} loop={false}>
+      <Swiper style={styles.wrapper} index={1} showsButtons={true} loop={false}>
+      <View style={styles.slide3}>
+        <PrepareVote />
+      </View>
         <View style={styles.slide1}>
-          <Text style={styles.text}>Informacje ogolne</Text>
+          <Profile />
         </View>
         <View style={styles.slide2}>
-          <Text style={styles.text}>Zdjecia znajomych</Text>
+          <FriendsVote />
         </View>
         <View style={styles.slide3}>
-          <Text style={styles.text}>Moje Zdjecia</Text>
+          <GlobalVoting />
         </View>
       </Swiper>
     );

@@ -28,8 +28,8 @@ export default class WelcomeScreen extends Component {
 
   checkAcc() {
     // TODO: Check in the Server/server.js /GET
-    if(this.state.loginInputText === 'Admin'
-      && this.state.passwordInputText === 'Password'){
+    if(this.state.loginInputText === 'a'
+      && this.state.passwordInputText === 'p'){
         this.props.hand("accTrue");
       }
     else{
