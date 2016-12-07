@@ -27,45 +27,47 @@ export default class WelcomeScreen extends Component {
   }
 
   checkAcc() {
-    // TODO: Check in the Server/server.js /GET
-    if(this.state.loginInputText === 'a'
-      && this.state.passwordInputText === 'p'){
-        this.props.hand("accTrue");
-      }
-    else{
-      this.setState({msg : "Wrong Login or Password! /l Admin /p Password"});
-    }
+    fetch('http://192.168.1.5:8082/login', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        login: this.state.loginInputText,
+        password: this.state.passwordInputText,
+      })
+    }).then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({msg : String(responseJson.user)});
+        this.props.hand('accTrue', String(responseJson.user));
+      })
+      .catch((error) => {
+        this.setState({msg : 'Error_J'});
+      });
   }
 
   registerAcc() {
-
-    var details = {
-    'login': 'login',
-    'password': 'Password!',
-  };
-
-  var formBody = [];
-  for (var property in details) {
-    var encodedKey = encodeURIComponent(property);
-    var encodedValue = encodeURIComponent(details[property]);
-    formBody.push(encodedKey + "=" + encodedValue);
+    fetch('http://192.168.1.5:8082/register', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        login: this.state.loginRegInputText,
+        password: this.state.passwordRegInputText,
+        username: this.state.usernameRegInputText,
+        fullname: this.state.fullNameRegInputText
+      })
+    }).then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({msg : responseJson.myMsg});
+      })
+      .catch((error) => {
+        this.setState({msg : 'Error_J'});
+      });
   }
-  formBody = formBody.join("&");
-
-  fetch('http://192.168.1.5:8082/register', {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
-      'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
-    },
-      body: formBody
-    }).then((response) => {
-      this.setState({msg : "1"})
-    }).catch((error) => {
-      this.setState({msg : '2'});
-    });
-  }
-
 
   render() {
     let logo = require('./img/Logo.jpg');
@@ -80,10 +82,10 @@ export default class WelcomeScreen extends Component {
         <TextInput placeholder="Password" onChangeText={(passwordInputText) => this.setState({passwordInputText})} value={this.state.passwordInputText}/>
         <Button title="Sign In" onPress={this.checkAcc}/>
 
-        <TextInput placeholder="Em@il"/>
-        <TextInput placeholder="Full Name"/>
-        <TextInput placeholder="Username"/>
-        <TextInput placeholder="Password"/>
+        <TextInput placeholder="Em@il" onChangeText={(loginRegInputText) => this.setState({loginRegInputText})} value={this.state.loginRegInputText}/>
+        <TextInput placeholder="Full Name" onChangeText={(fullNameRegInputText) => this.setState({fullNameRegInputText})} value={this.state.fullNameRegInputText}/>
+        <TextInput placeholder="Username" onChangeText={(usernameRegInputText) => this.setState({usernameRegInputText})} value={this.state.usernameRegInputText}/>
+        <TextInput placeholder="Password" onChangeText={(passwordRegInputText) => this.setState({passwordRegInputText})} value={this.state.passwordRegInputText}/>
         <Button title="Register" onPress={this.registerAcc}/>
         <Text> {this.state.msg} </Text>
       </View>
@@ -91,41 +93,6 @@ export default class WelcomeScreen extends Component {
   }
 }
 
-function postAcc() {
-var http = new XMLHttpRequest();
-var url = "http://localhost:8082/register";
-var params = "login=a&password=b";
-http.open("POST", url, true);
-
-//Send the proper header information along with the request
-http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-http.onreadystatechange = function() {//Call a function when the state changes.
-    if(http.readyState == 4 && http.status == 200) {
-        alert(http.responseText);
-    }
-}
- http.send(params);
-//   fetch('http://localhost:8082/register/', {
-//     method: 'POST',
-//     headers: {
-//       'Accept': 'application/json',
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify({
-//       login: 'kk',
-//       password: 'pp',
-//     })
-//   }).then(function(response) {
-//   if(response.ok) {
-//
-//   }
-// }).then(function(data) {
-//
-// }).catch(function(error) {
-//   alert(error);
-// });
-}
 
 const styles = StyleSheet.create({
   container: {

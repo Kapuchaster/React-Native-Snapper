@@ -16,36 +16,71 @@ hashCode = (text) => {
   return hash;
 }
 
+// create application/json parser
+var jsonParser = bodyParser.json()
 
-  // app.use(express.bodyParser());
-  //
+// create application/x-www-form-urlencoded parser
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
-app.use(bodyParser.urlencoded({ extended: true }));
+// POST /api/users gets JSON bodies
+app.post('/register', jsonParser, function (req, res) {
+  if (!req.body){return res.sendStatus(400)};
 
-app.post('/register', function(req, res) {
+  res.writeHead(200, {"Content-Type": "application/json"});
+
   let login = req.body.login;
   let password = req.body.password;
-  accs.push({login: hashCode(login), password: hashCode(password)})
-  console.log(login + " " + password);
-  res.send("Created: L:" + hashCode(login) + " P:" + hashCode(password));
+  let username = req.body.username;
+  let fullname = req.body.fullname;
+
+  accs.push({login: hashCode(login),
+    password: hashCode(password),
+    username: username,
+    fullname: fullname
+  })
+  console.log("Created:" + login + " " + password);
+
+  var json = JSON.stringify({
+    myMsg: 'OK'
+  });
+  res.end(json);
 })
 
-app.get('/login', function (req, res) {
+
+app.post('/login', jsonParser, function (req, res) {
+  if (!req.body) return res.sendStatus(400);
+
+  res.writeHead(200, {"Content-Type": "application/json"});
+
   let login = req.body.login;
   let password = req.body.password;
 
   if (accs === null){
-    res.send("There are any accounts");
+  console.log("any");
+    var json = JSON.stringify({
+      myMsg: 'Any Accs'
+    });
+    res.end(json);
     return;
   }
+
   for(let i=0; i<accs.length; i++){
     if(hashCode(login) === accs[i].login && hashCode(password) === accs[i].password)
       {
-        res.send("Data are correct L:"+ accs[i].login);
+        var json = JSON.stringify({
+          myMsg: 'OK',
+          user: accs[i].username
+        });
+        res.end(json);
         return;
       }
   }
-  res.send("Data are not correct");
+
+  var json = JSON.stringify({
+    myMsg: 'Data not correct'
+  });
+  res.end(json);
+  console.log("Data are not correct");
 })
 
 var server = app.listen(8082, function () {

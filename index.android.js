@@ -17,36 +17,38 @@ export default class SnapVoter extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      screen: 'welcomeScreen'
+      screen: 'welcomeScreen',
+      username: 'null'
     }
   }
 
-  hand = (data) => {
-      this.setState({ screen: data });
+  hand = (status, username) => {
+      this.setState({ screen: status });
+      this.setState({username: username});
     }
 
   render() {
+      // return (
+      //   <LoggedUser />
+      // )
+    if(this.state.screen === 'welcomeScreen'){
       return (
-        <LoggedUser />
+        <View>
+          <WelcomeScreen hand={this.hand} />
+          <Text> {this.state.screen} </Text>
+        </View>
+      );
+    }
+    else if(this.state.screen === 'accTrue'){
+      return (
+        <LoggedUser username={this.state.username} />
       )
-    // if(this.state.screen === 'welcomeScreen'){
-    //   return (
-    //     <View>
-    //       <WelcomeScreen hand={this.hand} />
-    //       <Text> {this.state.screen} </Text>
-    //     </View>
-    //   );
-    // }
-    // else if(this.state.screen === 'accTrue'){
-    //   return (
-    //     <LoggedUser />
-    //   )
-    // }
-    // else{
-    //   return (
-    //     <Text> Screen Id Error </Text>
-    //   )
-    // }
+    }
+    else{
+      return (
+        <Text> Screen Id Error: </Text>
+      )
+    }
   }
 }
 

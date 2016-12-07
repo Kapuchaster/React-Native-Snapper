@@ -33,6 +33,10 @@ var styles = StyleSheet.create({
 });
 
 export default class Profile extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
     let avatar = require('./img/Avatar.jpg');
     let awards = require('./img/Awards.jpg');
@@ -47,6 +51,7 @@ export default class Profile extends Component {
         <View style={styles.avatar}>
           <Image source = {avatar} />
           <Text>Profile</Text>
+          <Text>Hej {this.props.username} !</Text>
         </View>
         <Image source = {plus} />
       </View>

@@ -56,7 +56,7 @@ export default class LoggedUser extends Component {
         <PrepareVote />
       </View>
         <View style={styles.slide1}>
-          <Profile />
+          <Profile username={this.props.username}/>
         </View>
         <View style={styles.slide2}>
           <FriendsVote />
