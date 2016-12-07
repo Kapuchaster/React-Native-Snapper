@@ -26,24 +26,27 @@ export default class SnapVoter extends Component {
     }
 
   render() {
-    if(this.state.screen === 'welcomeScreen'){
-      return (
-        <View>
-          <WelcomeScreen hand={this.hand} />
-          <Text> {this.state.screen} </Text>
-        </View>
-      );
-    }
-    else if(this.state.screen === 'accTrue'){
       return (
         <LoggedUser />
       )
-    }
-    else{
-      return (
-        <Text> Screen Id Error </Text>
-      )
-    }
+    // if(this.state.screen === 'welcomeScreen'){
+    //   return (
+    //     <View>
+    //       <WelcomeScreen hand={this.hand} />
+    //       <Text> {this.state.screen} </Text>
+    //     </View>
+    //   );
+    // }
+    // else if(this.state.screen === 'accTrue'){
+    //   return (
+    //     <LoggedUser />
+    //   )
+    // }
+    // else{
+    //   return (
+    //     <Text> Screen Id Error </Text>
+    //   )
+    // }
   }
 }
 

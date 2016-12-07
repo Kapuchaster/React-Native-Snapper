@@ -1,12 +1,54 @@
 import React, { Component} from 'react';
-import { View, Text } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet
+ } from 'react-native';
+
+var styles = StyleSheet.create({
+  topMenu: {
+    backgroundColor:'#81c04d',
+    flexDirection:'row',
+  },
+  awards: {
+    margin: 7,
+    width: 40,
+    height: 40,
+  //  textAlign:'center',
+  },
+  profile: {
+    flex: 1,
+    textAlign:'center',
+  },
+  score: {
+    textAlign:'center',
+    margin: 10,
+    flex: 1,
+  },
+  avatar: {
+    justifyContent: 'center',
+    alignItems:'center',
+  }
+});
 
 export default class Profile extends Component {
-
   render() {
+    let avatar = require('./img/Avatar.jpg');
+    let awards = require('./img/Awards.jpg');
+    let plus = require('./img/Plus_add.jpg');
     return (
       <View>
-        <Text>Profile</Text>
+        <View style={styles.topMenu}>
+          <Image style={styles.awards} source = {awards} />
+          <Text style={styles.profile}> Profile </Text>
+          <Text style={styles.score}> Score: 0000 </Text>
+        </View>
+        <View style={styles.avatar}>
+          <Image source = {avatar} />
+          <Text>Profile</Text>
+        </View>
+        <Image source = {plus} />
       </View>
     )
   }
