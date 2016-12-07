@@ -1,6 +1,8 @@
 var express = require('express');
 var app = express();
-
+var bodyParser = require('body-parser');
+var multer = require('multer'); // v1.0.5
+var upload = multer(); // for parsing multipart/form-data
 var accs = [];
 
 hashCode = (text) => {
@@ -14,16 +16,23 @@ hashCode = (text) => {
   return hash;
 }
 
+
+  // app.use(express.bodyParser());
+  //
+
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.post('/register', function(req, res) {
-  let login = req.query.login;
-  let password = req.query.password;
+  let login = req.body.login;
+  let password = req.body.password;
   accs.push({login: hashCode(login), password: hashCode(password)})
+  console.log(login + " " + password);
   res.send("Created: L:" + hashCode(login) + " P:" + hashCode(password));
 })
 
 app.get('/login', function (req, res) {
-  let login = req.query.login;
-  let password = req.query.password;
+  let login = req.body.login;
+  let password = req.body.password;
 
   if (accs === null){
     res.send("There are any accounts");
@@ -32,14 +41,14 @@ app.get('/login', function (req, res) {
   for(let i=0; i<accs.length; i++){
     if(hashCode(login) === accs[i].login && hashCode(password) === accs[i].password)
       {
-        res.send("Data are correct");
+        res.send("Data are correct L:"+ accs[i].login);
         return;
       }
   }
   res.send("Data are not correct");
 })
 
-var server = app.listen(8081, function () {
+var server = app.listen(8082, function () {
    var host = server.address().address
    var port = server.address().port
 

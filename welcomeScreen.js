@@ -38,9 +38,34 @@ export default class WelcomeScreen extends Component {
   }
 
   registerAcc() {
-    //TODO: Register in the Server/server.js /POST
-    this.setState({msg : "will be availabe later"});
+
+    var details = {
+    'login': 'login',
+    'password': 'Password!',
+  };
+
+  var formBody = [];
+  for (var property in details) {
+    var encodedKey = encodeURIComponent(property);
+    var encodedValue = encodeURIComponent(details[property]);
+    formBody.push(encodedKey + "=" + encodedValue);
   }
+  formBody = formBody.join("&");
+
+  fetch('http://192.168.1.5:8082/register', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json, application/xml, text/plain, text/html, *.*',
+      'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
+    },
+      body: formBody
+    }).then((response) => {
+      this.setState({msg : "1"})
+    }).catch((error) => {
+      this.setState({msg : '2'});
+    });
+  }
+
 
   render() {
     let logo = require('./img/Logo.jpg');
