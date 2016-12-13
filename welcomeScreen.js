@@ -45,8 +45,11 @@ export default class WelcomeScreen extends Component {
       })
     }).then((response) => response.json())
       .then((responseJson) => {
-        this.setState({msg : String(responseJson.user)});
-        this.props.hand('accTrue', String(responseJson.user));
+
+        if(responseJson.myMsg === 'OK'){
+          this.props.hand(responseJson.myMsg, String(responseJson.user));
+        }
+        this.setState({msg : responseJson.myMsg});
       })
       .catch((error) => {
         this.setState({msg : 'Error_J'});

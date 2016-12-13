@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var multer = require('multer'); // v1.0.5
 var upload = multer(); // for parsing multipart/form-data
 var accs = [];
+var msgs = [];
 
 hashCode = (text) => {
   var hash = 0, i, chr, len;
@@ -39,13 +40,12 @@ app.post('/register', jsonParser, function (req, res) {
     fullname: fullname
   })
   console.log("Created:" + login + " " + password);
-
+  console.log("len: " + accs.length);
   var json = JSON.stringify({
     myMsg: 'OK'
   });
   res.end(json);
 })
-
 
 app.post('/login', jsonParser, function (req, res) {
   if (!req.body) return res.sendStatus(400);
@@ -81,6 +81,63 @@ app.post('/login', jsonParser, function (req, res) {
   });
   res.end(json);
   console.log("Data are not correct");
+})
+
+app.post('/addFriend', jsonParser, function (req, res) {
+  if (!req.body) return res.sendStatus(400);
+
+  let friendLogin = String(req.body.friendLogin);
+  for(let i=0; i<accs.length; i++){
+    if(friendLogin === accs[i].username)
+      {
+        console.log("found: " + accs[i].username);
+        var json = JSON.stringify({
+          myMsg: 'found',
+        });
+        res.end(json);
+        return;
+      }
+  }
+  var json = JSON.stringify({
+    myMsg: 'not_found',
+  });
+  res.end(json);
+})
+
+app.post('/sendMsg', jsonParser, function (req, res) {
+  if (!req.body) return res.sendStatus(400);
+
+  let username = String(req.body.username);
+  let rec = String(req.body.friendLogin);
+  let msg = String(req.body.msg);
+
+  msgs.push({from:username, to:rec, msg:msg});
+
+  var json = JSON.stringify({
+    myMsg: 'Sent'
+  });
+  res.end(json);
+})
+
+app.post('/receiveMsg', jsonParser, function (req, res) {
+  if (!req.body) return res.sendStatus(400);
+
+  let username = String(req.body.username);
+  console.log("username: " + username);
+  for(i=0; i<msgs.length; i++){
+    if(msgs[i].to === username){
+      var json = JSON.stringify({
+        msg: 'HEEEEJ!'
+      });
+      res.end(json);
+      return;
+    }
+  }
+
+  var json = JSON.stringify({
+    msg: 'hmm?'
+  });
+  res.end(json);
 })
 
 var server = app.listen(8082, function () {
