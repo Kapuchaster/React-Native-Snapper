@@ -43,13 +43,13 @@ export default class Profile extends Component {
     this.startChat = this.startChat.bind(this);
     this.backToProfile = this.backToProfile.bind(this);
     this.recMsg = this.recMsg.bind(this);
+    this.sendMsg = this.sendMsg.bind(this);
     this.state = {};
-    this.state.contact = null;
+    this.state.contact = 'null';
     this.friends = [];
     this.friendId = 0;
     this.msgs = [];
     this.msgId = 0;
-    this.username = "TestKapuchaster";
   }
 
 addFriend(){
@@ -76,11 +76,11 @@ addFriend(){
 }
 
 startChat(contactWith){
-  this.setState({contact:contactWith});
+  this.setState({contact: contactWith});
 }
 
 backToProfile(){
-  this.setState({contact:null});
+  this.setState({contact:'null'});
 }
 
 recMsg(){
@@ -91,7 +91,29 @@ recMsg(){
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      username: this.username
+      username: this.props.username
+    })
+  }).then((response) => response.json())
+    .then((responseJson) => {
+      this.msgs.push({key: this.msgId, from: responseJson.owner, value: responseJson.msg});
+      this.setState({msgs:this.createMsgList()});
+    })
+    .catch((error) => {
+
+    });
+}
+
+sendMsg(){
+  fetch('http://192.168.1.5:8082/sendMsg', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      username: this.props.username,
+      friendLogin: this.state.talker,
+      msg: this.state.chatMsg
     })
   }).then((response) => response.json())
     .then((responseJson) => {
@@ -104,16 +126,17 @@ recMsg(){
 }
 
 createMsgList(){
-  this.userId = this.userId+1;
+  this.msgId = this.msgId+1;
   return this.msgs.map((obj) =>
     <Text style={{fontSize:30}} key={obj.key}> {obj.value} </Text>
   );
 }
+
 createFriendList(){
   this.friendId = this.friendId+1;
   return this.friends.map((obj) =>
     <TouchableHighlight key={obj.key} onPress={this.startChat.bind(obj.value)}>
-      <Text style={{fontSize:30}}> {obj.value} </Text>
+      <Text style={{fontSize:20}}> {obj.value} </Text>
     </TouchableHighlight>
   );
 }
@@ -123,7 +146,7 @@ createFriendList(){
     let awards = require('./img/Awards.jpg');
     let plus = require('./img/Plus_add.jpg');
 
-    if(this.state.contact === null){
+    if(this.state.contact === 'null'){
       return (
         <View>
           <View style={styles.topMenu}>
@@ -153,9 +176,11 @@ createFriendList(){
           <Text> TO JE KONTAKT </Text>
           <Button title="Back" onPress={this.backToProfile}/>
           <Button title="Reveive" onPress={this.recMsg}/>
+          <Button title="Send" onPress={this.sendMsg}/>
 
           <ScrollView>
             {this.state.msgs}
+            <TextInput onChangeText={(chatMsg) => this.setState({chatMsg})} value={this.state.chatMsg}/>
           </ScrollView>
         </View>
       )

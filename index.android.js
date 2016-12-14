@@ -23,7 +23,7 @@ export default class SnapVoter extends Component {
   }
 
   hand = (status, username) => {
-      this.setState({ screen: status });
+      this.setState({screen: status });
       this.setState({username: username});
     }
 
@@ -46,7 +46,7 @@ export default class SnapVoter extends Component {
     }
     else{
       return (
-        <Text> Screen Id Error: </Text>
+        <Text> Screen Id Error: {this.state.username}</Text>
       )
     }
   }

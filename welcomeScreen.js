@@ -47,7 +47,7 @@ export default class WelcomeScreen extends Component {
       .then((responseJson) => {
 
         if(responseJson.myMsg === 'OK'){
-          this.props.hand(responseJson.myMsg, String(responseJson.user));
+          this.props.hand('accTrue', String(responseJson.user));
         }
         this.setState({msg : responseJson.myMsg});
       })
