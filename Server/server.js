@@ -112,8 +112,7 @@ app.post('/sendMsg', jsonParser, function (req, res) {
   let msg = String(req.body.msg);
 
   msgs.push({from:username, to:rec, msg:msg});
-  console.log('from: '+ username + 'to: ' +rec+ 'msg: '+msg)
-  console.dir("rec: " + rec);
+  console.log('from: '+ username + ' to: ' +rec+ ' msg: '+msg)
   var json = JSON.stringify({
     myMsg: 'Sent'
   });
@@ -124,9 +123,11 @@ app.post('/receiveMsg', jsonParser, function (req, res) {
   if (!req.body) return res.sendStatus(400);
 
   let username = String(req.body.username);
+  let from = String(req.body.from);
+
   for(i=0; i<msgs.length; i++){
-    console.log(msgs[i].to);
-    if(msgs[i].to === username){
+    console.log(msgs[i].to, from, msgs[i].from);
+    if(msgs[i].to === username && msgs[i].from === from){
       var json = JSON.stringify({
         owner: msgs[i].from,
         msg: msgs[i].msg

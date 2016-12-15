@@ -33,7 +33,7 @@ export default class WelcomeScreen extends Component {
       return;
     }
 
-    fetch('http://192.168.1.5:8082/login', {
+    fetch('http://192.168.4.204:8082/login', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -57,7 +57,7 @@ export default class WelcomeScreen extends Component {
   }
 
   registerAcc() {
-    fetch('http://192.168.1.5:8082/register', {
+    fetch('http://192.168.4.204:8082/register', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

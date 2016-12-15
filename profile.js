@@ -53,7 +53,7 @@ export default class Profile extends Component {
   }
 
 addFriend(){
-  fetch('http://192.168.1.5:8082/addFriend', {
+  fetch('http://192.168.4.204:8082/addFriend', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -76,7 +76,12 @@ addFriend(){
 }
 
 startChat(contactWith){
-  this.setState({contact: contactWith});
+  var strProp = "";
+  for ( var prop in contactWith ) {
+    strProp += " " + prop;
+  }
+  this.setState({msg:strProp})
+  this.setState({contact: String(contactWith)});
 }
 
 backToProfile(){
@@ -84,14 +89,15 @@ backToProfile(){
 }
 
 recMsg(){
-  fetch('http://192.168.1.5:8082/receiveMsg', {
+  fetch('http://192.168.4.204:8082/receiveMsg', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      username: this.props.username
+      username: this.props.username,
+      from: this.state.contact
     })
   }).then((response) => response.json())
     .then((responseJson) => {
@@ -104,7 +110,7 @@ recMsg(){
 }
 
 sendMsg(){
-  fetch('http://192.168.1.5:8082/sendMsg', {
+  fetch('http://192.168.4.204:8082/sendMsg', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -112,7 +118,7 @@ sendMsg(){
     },
     body: JSON.stringify({
       username: this.props.username,
-      friendLogin: this.state.talker,
+      friendLogin: this.state.contact,
       msg: this.state.chatMsg
     })
   }).then((response) => response.json())
@@ -135,7 +141,7 @@ createMsgList(){
 createFriendList(){
   this.friendId = this.friendId+1;
   return this.friends.map((obj) =>
-    <TouchableHighlight key={obj.key} onPress={this.startChat.bind(obj.value)}>
+    <TouchableHighlight key={obj.key} value={obj.value} onPress={() => this.startChat(obj.value)}>
       <Text style={{fontSize:20}}> {obj.value} </Text>
     </TouchableHighlight>
   );
@@ -182,6 +188,7 @@ createFriendList(){
             {this.state.msgs}
             <TextInput onChangeText={(chatMsg) => this.setState({chatMsg})} value={this.state.chatMsg}/>
           </ScrollView>
+          <Text> {this.state.msg} </Text>
         </View>
       )
     }
