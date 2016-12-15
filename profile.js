@@ -36,6 +36,8 @@ var styles = StyleSheet.create({
   }
 });
 
+const config = require('./config.json');
+
 export default class Profile extends Component {
   constructor(props) {
     super(props);
@@ -53,7 +55,7 @@ export default class Profile extends Component {
   }
 
 addFriend(){
-  fetch('http://192.168.4.204:8082/addFriend', {
+  fetch(config.serverurl+'/addFriend', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -89,7 +91,7 @@ backToProfile(){
 }
 
 recMsg(){
-  fetch('http://192.168.4.204:8082/receiveMsg', {
+  fetch(config.serverurl+'/receiveMsg', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -101,16 +103,18 @@ recMsg(){
     })
   }).then((response) => response.json())
     .then((responseJson) => {
-      this.msgs.push({key: this.msgId, from: responseJson.owner, value: responseJson.msg});
-      this.setState({msgs:this.createMsgList()});
+       if(responseJson.msg !== '-noMsg'){
+        this.msgs.push({key: this.msgId, value: (responseJson.owner + ': ' + responseJson.msg)});
+        this.setState({msgs:this.createMsgList()});
+       }
     })
     .catch((error) => {
-
+      this.state.check ="sth srong"
     });
 }
 
 sendMsg(){
-  fetch('http://192.168.4.204:8082/sendMsg', {
+  fetch(config.serverurl+'/sendMsg', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -123,7 +127,8 @@ sendMsg(){
     })
   }).then((response) => response.json())
     .then((responseJson) => {
-      this.msgs.push({key: this.msgId, value: responseJson.msg});
+      this.msgs.push({key: this.msgId, value: this.props.username+': '+this.state.chatMsg});
+      this.state.chatMsg = '';
       this.setState({msgs:this.createMsgList()});
     })
     .catch((error) => {
@@ -134,7 +139,7 @@ sendMsg(){
 createMsgList(){
   this.msgId = this.msgId+1;
   return this.msgs.map((obj) =>
-    <Text style={{fontSize:30}} key={obj.key}> {obj.value} </Text>
+    <Text style={{fontSize:20}} key={obj.key}> {obj.value} </Text>
   );
 }
 
@@ -183,12 +188,12 @@ createFriendList(){
           <Button title="Back" onPress={this.backToProfile}/>
           <Button title="Reveive" onPress={this.recMsg}/>
           <Button title="Send" onPress={this.sendMsg}/>
+          <Text> {this.state.check} </Text>
+          <TextInput onChangeText={(chatMsg) => this.setState({chatMsg})} value={this.state.chatMsg}/>
 
           <ScrollView>
             {this.state.msgs}
-            <TextInput onChangeText={(chatMsg) => this.setState({chatMsg})} value={this.state.chatMsg}/>
           </ScrollView>
-          <Text> {this.state.msg} </Text>
         </View>
       )
     }

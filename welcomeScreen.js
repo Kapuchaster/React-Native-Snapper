@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 
 const screenWidth = Dimensions.get('window').width;
+const config = require('./config.json');
 
 export default class WelcomeScreen extends Component {
   constructor(props) {
@@ -26,6 +27,8 @@ export default class WelcomeScreen extends Component {
     this.registerAcc = this.registerAcc.bind(this);
   }
 
+
+
   checkAcc() {
     if(this.state.loginInputText === 'a'
     && this.state.passwordInputText === 'p'){
@@ -33,7 +36,7 @@ export default class WelcomeScreen extends Component {
       return;
     }
 
-    fetch('http://192.168.4.204:8082/login', {
+    fetch(config.serverurl+'/login', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -57,7 +60,7 @@ export default class WelcomeScreen extends Component {
   }
 
   registerAcc() {
-    fetch('http://192.168.4.204:8082/register', {
+    fetch(config.serverurl+'/register', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

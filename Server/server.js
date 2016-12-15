@@ -139,7 +139,7 @@ app.post('/receiveMsg', jsonParser, function (req, res) {
   }
 
   var json = JSON.stringify({
-    msg: 'hmm?'
+    msg: '-noMsg'
   });
   res.end(json);
 })
