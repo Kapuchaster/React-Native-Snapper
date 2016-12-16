@@ -109,11 +109,14 @@ recMsg(){
        }
     })
     .catch((error) => {
-      this.state.check ="sth srong"
+      this.state.check ="sth wrong"
     });
 }
 
 sendMsg(){
+  if(this.state.chatMsg === '' || String(this.state.chatMsg) === 'undefined'){
+    return;
+  }
   fetch(config.serverurl+'/sendMsg', {
     method: 'POST',
     headers: {

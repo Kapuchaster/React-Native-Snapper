@@ -34,6 +34,23 @@ app.post('/register', jsonParser, function (req, res) {
   let username = req.body.username;
   let fullname = req.body.fullname;
 
+  for(i=0; i<accs.length; i++){
+    if(accs[i].login === hashCode(login)){
+      var json = JSON.stringify({
+        myMsg: 'Login already exists'
+      });
+      res.end(json);
+      return;
+    }
+    else if(accs[i].username === username){
+      var json = JSON.stringify({
+        myMsg: 'Username already exists'
+      });
+      res.end(json);
+      return;
+    }
+  }
+
   accs.push({login: hashCode(login),
     password: hashCode(password),
     username: username,
@@ -42,7 +59,7 @@ app.post('/register', jsonParser, function (req, res) {
   console.log("Created:" + login + " " + password);
   console.log("len: " + accs.length);
   var json = JSON.stringify({
-    myMsg: 'OK'
+    myMsg: 'Account Created'
   });
   res.end(json);
 })
@@ -126,7 +143,6 @@ app.post('/receiveMsg', jsonParser, function (req, res) {
   let from = String(req.body.from);
 
   for(i=0; i<msgs.length; i++){
-    console.log(msgs[i].to, from, msgs[i].from);
     if(msgs[i].to === username && msgs[i].from === from){
       var json = JSON.stringify({
         owner: msgs[i].from,
