@@ -4,11 +4,8 @@ var app = express();
 var bodyParser = require('body-parser');
 var multer = require('multer'); // v1.0.5
 var upload = multer(); // for parsing multipart/form-data
-var accs = [];
 var msgs = [];
-
-var user = new User();
-user.test();
+var users =[];
 
 hashCode = (text) => {
   var hash = 0, i, chr, len;
@@ -38,32 +35,15 @@ app.post('/register', jsonParser, function (req, res) {
   let username = req.body.username;
   let fullname = req.body.fullname;
 
-  // Set our internal DB variable
-    var db = req.db;
-    var collection = db.get('usercollection');
-    // Submit to the DB
-// collection.insert({
-//     "login" : login,
-//     "password" : password,
-//     "username" : username
-// }, function (err, doc) {
-//     if (err) {
-//
-//     }
-//     else {
-//
-//     }
-// });
-
-  for(i=0; i<accs.length; i++){
-    if(accs[i].login === hashCode(login)){
+  for(i=0; i<users.length; i++){
+    if(users[i].login === hashCode(login)){
       var json = JSON.stringify({
         myMsg: 'Login already exists'
       });
       res.end(json);
       return;
     }
-    else if(accs[i].username === username){
+    else if(users[i].username === username){
       var json = JSON.stringify({
         myMsg: 'Username already exists'
       });
@@ -72,13 +52,10 @@ app.post('/register', jsonParser, function (req, res) {
     }
   }
 
-  accs.push({login: hashCode(login),
-    password: hashCode(password),
-    username: username,
-    fullname: fullname
-  })
-  console.log("Created:" + login + " " + password);
-  console.log("len: " + accs.length);
+  users.push(new User(hashCode(login),hashCode(password),username,fullname));
+
+  console.log("Created: " + login + " " + password);
+  console.log("Accs Amount: " + users.length);
   var json = JSON.stringify({
     myMsg: 'Account Created'
   });
@@ -93,7 +70,7 @@ app.post('/login', jsonParser, function (req, res) {
   let login = req.body.login;
   let password = req.body.password;
 
-  if (accs === null){
+  if (users === null){
   console.log("any");
     var json = JSON.stringify({
       myMsg: 'Any Accs'
@@ -102,12 +79,12 @@ app.post('/login', jsonParser, function (req, res) {
     return;
   }
 
-  for(let i=0; i<accs.length; i++){
-    if(hashCode(login) === accs[i].login && hashCode(password) === accs[i].password)
+  for(let i=0; i<users.length; i++){
+    if(hashCode(login) === users[i].login && hashCode(password) === users[i].password)
       {
         var json = JSON.stringify({
           myMsg: 'OK',
-          user: accs[i].username
+          user: users[i].username
         });
         res.end(json);
         return;
@@ -121,14 +98,41 @@ app.post('/login', jsonParser, function (req, res) {
   console.log("Data are not correct");
 })
 
+app.post('/getFriends', jsonParser, function (req, res) {
+  if (!req.body) return res.sendStatus(400);
+
+
+  let username = req.body.username;
+  console.log("getFriends(1)")
+  for(i=0; i<users.length; i++){
+    console.log(username)
+    if(users[i].username === username){
+      var json = JSON.stringify({
+        friends: users[i].getFriends()
+      });
+      console.log("frList: ", json.friends);
+      res.end(json);
+    }
+  }
+})
+
 app.post('/addFriend', jsonParser, function (req, res) {
   if (!req.body) return res.sendStatus(400);
 
   let friendLogin = String(req.body.friendLogin);
-  for(let i=0; i<accs.length; i++){
-    if(friendLogin === accs[i].username)
+  let username = req.body.username;
+
+  for(let i=0; i<users.length; i++){
+    if(friendLogin === users[i].username)
       {
-        console.log("found: " + accs[i].username);
+        console.log("found: " + users[i].username);
+        for(j=0; j<users.length; j++){
+          console.log("HALO ?", username, users[j].username);
+          if(username === users[j].username){
+
+            users[j].addFriend(friendLogin);
+          }
+        }
         var json = JSON.stringify({
           myMsg: 'found',
         });

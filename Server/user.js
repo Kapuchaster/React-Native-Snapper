@@ -1,21 +1,14 @@
 
-module.exports = function User() {
-    // this.login = login;
-    // this.password = password;
-    // this.username = username;
-    // this.fullname = fullname;
+module.exports = function User(login,password,username,fullname) {
+  this.login = login;
+  this.password = password;
+  this.username = username;
+  this.fullname = fullname;
   this.friends = [];
-
-  this.write = function(object) {
-    this.socket.write(JSON.stringify(object));
-}
-
-  this.test = function(){
-    console.log("test Correct");
-  }
 
   this.addFriend = function(username){
     this.friends.push(username);
+    console.log("Added ", username, "to", this.username);
   }
 
   this.removeFriend = function(username){
@@ -31,5 +24,4 @@ module.exports = function User() {
   this.getFriends = function(){
     return this.friends;
   }
-
 }

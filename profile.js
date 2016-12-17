@@ -52,8 +52,11 @@ export default class Profile extends Component {
     this.friendId = 0;
     this.msgs = [];
     this.msgId = 0;
-  }
 
+  }
+componentDidMount(){
+  this.getFriends();
+}
 addFriend(){
   for(i=0; i<this.friends.length; i++){
     if(this.friends[i].value === this.state.friendLogin){
@@ -67,11 +70,13 @@ addFriend(){
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
+      username: this.props.username,
       friendLogin: this.state.friendLogin
     })
   }).then((response) => response.json())
     .then((responseJson) => {
       if(responseJson.myMsg === 'found'){
+        this.friendId = this.friendId+1;
         this.friends.push({key: this.friendId, value: this.state.friendLogin});
         this.setState({friends  : this.createFriendList()});
       }
@@ -93,6 +98,30 @@ startChat(contactWith){
 
 backToProfile(){
   this.setState({contact:'null'});
+}
+
+getFriends(){
+  fetch(config.serverurl+'/getFriends', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      username: "a",
+    })
+  }).then((response) => response.json())
+    .then((responseJson) => {
+      let frs = responseJson.friends;
+      for(i=0; i<frs.length; i++){
+        this.friendId = this.friendId+1;
+        this.friends.push({key: this.friendId, value: frs[i]});
+      }
+      this.setState({friends  : this.createFriendList()});
+    })
+    .catch((error) => {
+      this.state.check ="sth wrong"
+    });
 }
 
 recMsg(){
@@ -152,7 +181,7 @@ createMsgList(){
 }
 
 createFriendList(){
-  this.friendId = this.friendId+1;
+//  this.friendId = this.friendId+1;
   return this.friends.map((obj) =>
     <TouchableHighlight key={obj.key} value={obj.value} onPress={() => this.startChat(obj.value)}>
       <Text style={{fontSize:20}}> {obj.value} </Text>
