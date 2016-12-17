@@ -1,10 +1,14 @@
 var express = require('express');
+var User = require('./user.js');
 var app = express();
 var bodyParser = require('body-parser');
 var multer = require('multer'); // v1.0.5
 var upload = multer(); // for parsing multipart/form-data
 var accs = [];
 var msgs = [];
+
+var user = new User();
+user.test();
 
 hashCode = (text) => {
   var hash = 0, i, chr, len;
@@ -33,6 +37,23 @@ app.post('/register', jsonParser, function (req, res) {
   let password = req.body.password;
   let username = req.body.username;
   let fullname = req.body.fullname;
+
+  // Set our internal DB variable
+    var db = req.db;
+    var collection = db.get('usercollection');
+    // Submit to the DB
+// collection.insert({
+//     "login" : login,
+//     "password" : password,
+//     "username" : username
+// }, function (err, doc) {
+//     if (err) {
+//
+//     }
+//     else {
+//
+//     }
+// });
 
   for(i=0; i<accs.length; i++){
     if(accs[i].login === hashCode(login)){

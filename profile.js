@@ -55,6 +55,11 @@ export default class Profile extends Component {
   }
 
 addFriend(){
+  for(i=0; i<this.friends.length; i++){
+    if(this.friends[i].value === this.state.friendLogin){
+      return;
+    }
+  }
   fetch(config.serverurl+'/addFriend', {
     method: 'POST',
     headers: {
