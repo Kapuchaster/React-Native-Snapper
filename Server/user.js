@@ -36,8 +36,13 @@ module.exports = function User(login,password,username,fullname) {
     console.log("Msgs1: ", this.msgs[sender]);
   }
 
+  this.addVoteMsg = function(sender, type, images){
+
+  }
+
   this.getMsgsFrom = function(sender){
     console.log("Msgs2: ",this.msgs[sender]);
+    return this.msgs[sender];
   }
 
 }
