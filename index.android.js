@@ -18,13 +18,13 @@ export default class SnapVoter extends Component {
     super(props);
     this.state = {
       screen: 'welcomeScreen',
-      username: 'null'
+      username: 'nulll'
     }
   }
 
   hand = (status, username) => {
-      this.setState({screen: status });
-      this.setState({username: username});
+    this.setState({screen: status });
+    this.setState({username: username});
     }
 
   render() {

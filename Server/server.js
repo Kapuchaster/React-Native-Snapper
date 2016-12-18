@@ -103,7 +103,7 @@ app.post('/getFriends', jsonParser, function (req, res) {
 
 
   let username = req.body.username;
-  console.log("getFriends(1)")
+  console.log("getFriends(1)", username)
   for(i=0; i<users.length; i++){
     console.log(username)
     if(users[i].username === username){
@@ -127,7 +127,6 @@ app.post('/addFriend', jsonParser, function (req, res) {
       {
         console.log("found: " + users[i].username);
         for(j=0; j<users.length; j++){
-          console.log("HALO ?", username, users[j].username);
           if(username === users[j].username){
 
             users[j].addFriend(friendLogin);
@@ -153,7 +152,14 @@ app.post('/sendMsg', jsonParser, function (req, res) {
   let rec = String(req.body.friendLogin);
   let msg = String(req.body.msg);
 
+  for(let i=0; i<users.length; i++){
+    if(users[i].username === rec){
+      users[i].addMsg(username,String(msg));
+      break;
+    }
+  }
   msgs.push({from:username, to:rec, msg:msg});
+
   console.log('from: '+ username + ' to: ' +rec+ ' msg: '+msg)
   var json = JSON.stringify({
     myMsg: 'Sent'
@@ -169,6 +175,12 @@ app.post('/receiveMsg', jsonParser, function (req, res) {
 
   for(i=0; i<msgs.length; i++){
     if(msgs[i].to === username && msgs[i].from === from){
+      for(let j=0; j<users.length; j++){
+        if(users[j].username == username){
+          users[j].getMsgsFrom(from);
+          break;
+        }
+      }
       var json = JSON.stringify({
         owner: msgs[i].from,
         msg: msgs[i].msg

@@ -52,17 +52,16 @@ export default class Profile extends Component {
     this.friendId = 0;
     this.msgs = [];
     this.msgId = 0;
-
+    this.getFriends();
   }
-componentDidMount(){
-  this.getFriends();
-}
+
 addFriend(){
   for(i=0; i<this.friends.length; i++){
     if(this.friends[i].value === this.state.friendLogin){
       return;
     }
   }
+
   fetch(config.serverurl+'/addFriend', {
     method: 'POST',
     headers: {
@@ -85,6 +84,7 @@ addFriend(){
     .catch((error) => {
       this.setState({msg : 'Error_J'});
     });
+
 }
 
 startChat(contactWith){
@@ -108,7 +108,7 @@ getFriends(){
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      username: "a",
+      username: "a"
     })
   }).then((response) => response.json())
     .then((responseJson) => {
