@@ -25,15 +25,19 @@ module.exports = function User(login,password,username,fullname) {
   this.getFriends = function(){
     return this.friends;
   }
-
-  this.addMsg = function(sender, msg){
+//TODO: Wiadomosc musi sie zapisaywac we wlasciwym miejscu
+  this.addMsg = function(sender, msg, me){
+    console.log(this.username,sender,msg,me)
     if(String(this.msgs[sender]) === 'undefined'){
       this.msgs[sender] = [];
     }
-
-    this.msgs[sender].push({'msg' : msg});
-
-    console.log("Msgs1: ", this.msgs[sender]);
+    if(me === true){
+      this.msgs[sender].push({'msg' : "Me: "+msg});
+    }
+    else{
+      this.msgs[sender].push({'msg' : sender+": "+msg});
+    }
+    console.log("--",this.msgs[sender])
   }
 
   this.addVoteMsg = function(sender, type, images){

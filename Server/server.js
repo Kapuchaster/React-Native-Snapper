@@ -154,11 +154,16 @@ app.post('/sendMsg', jsonParser, function (req, res) {
 
   for(let i=0; i<users.length; i++){
     if(users[i].username === rec){
-      users[i].addMsg(username,String(msg));
+      users[i].addMsg(username,String(msg),false);
       break;
     }
   }
-  msgs.push({from:username, to:rec, msg:msg});
+  for(let i=0; i<users.length; i++){
+    if(users[i].username === username){
+      users[i].addMsg(rec,String(msg),true);
+      break;
+    }
+  }
 
   console.log('from: '+ username + ' to: ' +rec+ ' msg: '+msg)
   var json = JSON.stringify({
@@ -172,24 +177,25 @@ app.post('/receiveMsg', jsonParser, function (req, res) {
 
   let username = String(req.body.username);
   let from = String(req.body.from);
+  var tempMsgs;
 
-  for(i=0; i<msgs.length; i++){
-    if(msgs[i].to === username && msgs[i].from === from){
-      for(let j=0; j<users.length; j++){
-        if(users[j].username == username){
-          users[j].getMsgsFrom(from);
-          break;
-        }
+//  for(i=0; i<msgs.length; i++){
+//    if(msgs[i].to === username && msgs[i].from === from){
+    for(let j=0; j<users.length; j++){
+      if(users[j].username == username){
+        tempMsgs = users[j].getMsgsFrom(from);
+        var json = JSON.stringify({
+          owner: from,
+          msg: tempMsgs
+        });
+
+        res.end(json);
+        return;
       }
-      var json = JSON.stringify({
-        owner: msgs[i].from,
-        msg: msgs[i].msg
-      });
-      msgs.splice(i,1);
-      res.end(json);
-      return;
-    }
-  }
+     }
+
+//    }
+//  }
 
   var json = JSON.stringify({
     msg: '-noMsg'
