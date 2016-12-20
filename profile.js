@@ -88,12 +88,14 @@ addFriend(){
 }
 
 startChat(contactWith){
-  var strProp = "";
-  for ( var prop in contactWith ) {
-    strProp += " " + prop;
-  }
-  this.setState({msg:strProp})
+  // var strProp = "";
+  // for ( var prop in contactWith ) {
+  //   strProp += " " + prop;
+  // }
+  // this.setState({msg:strProp})
+  //this.recMsg();
   this.setState({contact: String(contactWith)});
+
 }
 
 backToProfile(){
@@ -108,7 +110,7 @@ getFriends(){
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      username: "a"
+      username: this.props.username
     })
   }).then((response) => response.json())
     .then((responseJson) => {
@@ -138,8 +140,11 @@ recMsg(){
   }).then((response) => response.json())
     .then((responseJson) => {
        if(responseJson.msg !== '-noMsg'){
-        this.msgs.push({key: this.msgId, value: (responseJson.owner + ': ' + responseJson.msg)});
-        this.setState({msgs:this.createMsgList()});
+         for(i=0;i<responseJson.msg.length; i++){
+           this.msgId = this.msgId+1;
+           this.msgs.push({key: this.msgId, value: (responseJson.msg[i].msg)});
+         }
+    this.setState({msgs:this.createMsgList()});
        }
     })
     .catch((error) => {
@@ -164,6 +169,7 @@ sendMsg(){
     })
   }).then((response) => response.json())
     .then((responseJson) => {
+      this.msgId = this.msgId+1;
       this.msgs.push({key: this.msgId, value: this.props.username+': '+this.state.chatMsg});
       this.state.chatMsg = '';
       this.setState({msgs:this.createMsgList()});
@@ -174,7 +180,6 @@ sendMsg(){
 }
 
 createMsgList(){
-  this.msgId = this.msgId+1;
   return this.msgs.map((obj) =>
     <Text style={{fontSize:20}} key={obj.key}> {obj.value} </Text>
   );
@@ -209,7 +214,6 @@ createFriendList(){
           </View>
           <TextInput placeholder="Add Friend" onChangeText={(friendLogin) => this.setState({friendLogin})} value={this.state.friendLogin}/>
           <Button title="ADD" onPress={this.addFriend}/>
-          <Text> {this.state.msg} </Text>
 
           <ScrollView>
             {this.state.friends}

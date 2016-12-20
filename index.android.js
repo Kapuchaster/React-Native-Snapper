@@ -23,9 +23,9 @@ export default class SnapVoter extends Component {
   }
 
   hand = (status, username) => {
-    this.setState({screen: status });
     this.setState({username: username});
-    }
+    this.setState({screen: status });
+  }
 
   render() {
       // return (
@@ -36,18 +36,19 @@ export default class SnapVoter extends Component {
         <View>
           <WelcomeScreen hand={this.hand} />
           <Text> {this.state.screen} </Text>
+          <Text> {this.state.username} </Text>
         </View>
       );
     }
     else if(this.state.screen === 'accTrue'){
       return (
         <LoggedUser username={this.state.username} />
-      )
+      );
     }
     else{
       return (
         <Text> Screen Id Error: {this.state.username}</Text>
-      )
+      );
     }
   }
 }
