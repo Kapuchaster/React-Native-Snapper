@@ -88,14 +88,9 @@ addFriend(){
 }
 
 startChat(contactWith){
-  // var strProp = "";
-  // for ( var prop in contactWith ) {
-  //   strProp += " " + prop;
-  // }
-  // this.setState({msg:strProp})
-  //this.recMsg();
   this.setState({contact: String(contactWith)});
-
+  this.state.contact = String(contactWith);
+  this.recMsg();
 }
 
 backToProfile(){
@@ -122,11 +117,12 @@ getFriends(){
       this.setState({friends  : this.createFriendList()});
     })
     .catch((error) => {
-      this.state.check ="sth wrong"
+      this.state.check = String(error)
     });
 }
 
 recMsg(){
+
   fetch(config.serverurl+'/receiveMsg', {
     method: 'POST',
     headers: {
@@ -148,7 +144,7 @@ recMsg(){
        }
     })
     .catch((error) => {
-      this.state.check ="sth wrong"
+      this.state.check = String(error);
     });
 }
 

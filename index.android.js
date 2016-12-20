@@ -53,6 +53,4 @@ export default class SnapVoter extends Component {
   }
 }
 
-
-
 AppRegistry.registerComponent('SnapVoter', () => SnapVoter);
